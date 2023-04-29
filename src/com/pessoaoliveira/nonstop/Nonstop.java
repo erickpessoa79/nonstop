@@ -1,5 +1,5 @@
 /*
-autor: erick.oliveirapessoa@gmail.com
+autor: erick
 */
 package com.pessoaoliveira.nonstop;
 
