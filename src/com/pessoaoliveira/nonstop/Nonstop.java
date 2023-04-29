@@ -32,11 +32,11 @@ public class Nonstop {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int delay = 1 * 60 * 1000;
+        int delay = 1 * 60 * 1000; //in minutes
         
         Nonstop non = new Nonstop();
         try {
-            non.image();
+//            non.image();
             while (true) {
                 Thread.sleep(delay);
                 non.move(100);
@@ -72,7 +72,7 @@ public class Nonstop {
         while(point.x < fim) {
             robot.mouseMove(point.x + 1, point.y);
             point = MouseInfo.getPointerInfo().getLocation();
-            imageMove(point.x - initial.x, 0);
+//            imageMove(point.x - initial.x, 0);
 //            Color pixelColor = robot.getPixelColor(point.x, point.y);
 //            System.out.println(pixelColor + " " + point.x);
         }
@@ -81,9 +81,9 @@ public class Nonstop {
         while(point.x > fim) {
             robot.mouseMove(point.x - 1, point.y);
             point = MouseInfo.getPointerInfo().getLocation();
-            imageMove(point.x - initial.x, 0);
+//            imageMove(point.x - initial.x, 0);
         }
-        imageRemove();
+//        imageRemove();
     }
     
     public void image() throws InterruptedException {
