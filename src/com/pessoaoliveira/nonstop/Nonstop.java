@@ -1,5 +1,6 @@
 /*
- */
+autor: erick.oliveirapessoa@gmail.com
+*/
 package com.pessoaoliveira.nonstop;
 
 import java.awt.AWTException;
