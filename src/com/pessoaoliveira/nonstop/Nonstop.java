@@ -38,12 +38,11 @@ public class Nonstop {
             }
             
             if(delay == 0) delay = 10000; //min: 10 
-            System.out.println("\tinterval "+delay+"ms");
+            System.out.println("\tscheduled at "
+                    + (delay<60000?(delay/1000)+"s":(delay/60000)+"m")+" rate");
             
             Nonstop nonstop = new Nonstop();
             nonstop.play();
-
-            System.out.println("started");
         } catch (NumberFormatException ex) {
             Logger.getLogger(Nonstop.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,15 +57,11 @@ public class Nonstop {
                 .newSingleThreadScheduledExecutor();
         
         ns = new NSMouse();
-//        ns.startDialog();
 //        ns.setShowImage(true);
         tray.setNsmouse(ns);
         
-        Runnable runn = new Runnable() {
-            @Override
-            public void run() {
-                ns.start();
-            }
+        Runnable runn = () -> {
+            ns.start();
         };
         
         executor.scheduleAtFixedRate(runn, 1, 10, TimeUnit.SECONDS);

@@ -11,7 +11,6 @@ import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.logging.Level;
@@ -56,16 +55,12 @@ public class Tray {
         final PopupMenu menu = new PopupMenu();
         MenuItem item = new MenuItem("Exit");
         
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executor.shutdown();
-//                nsmouse.closeDialog();
-                TrayIcon[] trayIcons = tray.getTrayIcons();
-                for(TrayIcon tray_icon: trayIcons)
-                    tray.remove(tray_icon);
-//                System.exit(0);
-            }
+        item.addActionListener((ActionEvent e) -> {
+            executor.shutdown();
+            if(nsmouse.isShowImage()) nsmouse.closeDialog();
+            TrayIcon[] icons = tray.getTrayIcons();
+            for(TrayIcon icon: icons)
+                tray.remove(icon);
         });
 
 //        menu.addSeparator();

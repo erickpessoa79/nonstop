@@ -1,6 +1,4 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.pessoaoliveira.nonstop.mouse;
 
@@ -11,8 +9,6 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -39,8 +35,13 @@ public class NSMouse implements Runnable {
         this.threadName = "thread-nonstop-mouse";
     }
 
-    public void setShowImage(boolean showImage) {
-        this.showImage = showImage;
+    public void setShowImage(boolean show) {
+        if(show) startDialog();
+        this.showImage = show;
+    }
+
+    public boolean isShowImage() {
+        return showImage;
     }
     
     public void start() {
@@ -82,7 +83,7 @@ public class NSMouse implements Runnable {
         if(showImage) dialog.setVisible(false);
     }
     
-    public void startDialog() {
+    private void startDialog() {
         point = MouseInfo.getPointerInfo().getLocation();
         BufferedImage image;
         image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
