@@ -6,12 +6,12 @@ package com.pessoaoliveira.nonstop.mouse;
 
 import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,69 +25,69 @@ import javax.swing.SwingConstants;
  * @author erick
  */
 public class NSMouse implements Runnable {
+    private Thread thread;
+    private String threadName;
     private Robot robot;
     private Point point;
     private Point initial;
     private JDialog dialog;
     private JLabel label;
     private int rdl = 1000;
-    private Thread thread;
-    private final String threadName;
+    private boolean showImage;
     
     public NSMouse() {
         this.threadName = "thread-nonstop-mouse";
-        try {
-            robot = new Robot();
-            PointerInfo pi = MouseInfo.getPointerInfo();
-            point = pi.getLocation();
-            initial = pi.getLocation();
-        } catch (AWTException ex) {
-            Logger.getLogger(NSMouse.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
+
+    public void setShowImage(boolean showImage) {
+        this.showImage = showImage;
+    }
+    
     public void start() {
         thread = new Thread(this, threadName);
         thread.start();
     }
+        
     @Override
     public void run() {
         try {
+            threadName += "-start";
+            robot = new Robot();
+            point = location();
             move(100);
-        } catch (InterruptedException ex) {
+            threadName = threadName.replace("-start", "-stop");
+        } catch (InterruptedException | AWTException ex) {
             Logger.getLogger(NSMouse.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void move(int mv) throws InterruptedException {
-//        dialog.setVisible(true);
-        point = MouseInfo.getPointerInfo().getLocation();
+    public void move(int pixels) throws InterruptedException {
+        if(showImage) dialog.setVisible(true);
+        point = location();
 //        System.out.println(new Date()+" "+point); //debug
-        int fim = point.x + mv;
-        int x=0, y=0;
-        while(point.x < fim) {
-            robot.mouseMove(point.x + 1, point.y);
-            point = MouseInfo.getPointerInfo().getLocation();
-//            imageMove(point.x - initial.x, 0);
+        int fim = point.x + pixels;
+        int x=0, y=point.x;
+        while(y++ < fim) {
+            robot.mouseMove(y, point.y);
+            if(showImage) imageMove(x++, 0);
 //            Color pixelColor = robot.getPixelColor(point.x, point.y);
 //            System.out.println(pixelColor + " " + point.x);
         }
-        Thread.sleep(rdl);
-        fim = point.x - mv;
-        while(point.x > fim) {
-            robot.mouseMove(point.x - 1, point.y);
-            point = MouseInfo.getPointerInfo().getLocation();
-//            imageMove(point.x - initial.x, 0);
+          Thread.sleep(rdl);
+        fim -= pixels;
+        while(y-- > fim) {
+            robot.mouseMove(y, point.y);
+            if(showImage) imageMove(x--, 0);
         }
-        imageRemove();
+        if(showImage) dialog.setVisible(false);
     }
     
-    public void image() throws InterruptedException {
+    public void startDialog() {
         point = MouseInfo.getPointerInfo().getLocation();
         BufferedImage image;
         image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-        Graphics g = image.createGraphics();
-//        Graphics2D g = image.createGraphics();
+        image.flush();
+        Graphics2D g = image.createGraphics();
         g.setColor(Color.blue);
         g.fillRect(0, 0, 100, 100);
         g.dispose();
@@ -106,15 +106,25 @@ public class NSMouse implements Runnable {
         dialog.setSize(200, 100);
         dialog.setLocation(point.x, point.y);
         label.setHorizontalAlignment(SwingConstants.LEFT);
-//        dialog.setVisible(true); //debug
+    }
+    
+    public void closeDialog() {
+        dialog.removeAll();
+        dialog.dispose();
     }
     
     public void imageMove(int x, int y) {
-//        dialog.setLocation(x, y);
         label.setLocation(x, y);
     }
     
-    public void imageRemove() {
-        dialog.setVisible(false);
+    public boolean stop() {
+        System.out.println(location());
+        System.out.println(point);
+        System.out.println(point.x == location().x);
+        return true;//point == location();
+    }
+    
+    private Point location() {
+        return MouseInfo.getPointerInfo().getLocation();
     }
 }
