@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 
 /**
  *
- * @author erick
+ * @author erick.pessoa@hotmail.com
  */
 public class NSMouse implements Runnable {
     private Thread thread;

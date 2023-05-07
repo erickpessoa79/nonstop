@@ -18,14 +18,14 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author erick
+ * @author erick.pessoa@hotmail.com
  */
 public class Tray {
     private SystemTray tray;
     private NSMouse nsmouse;
     private ScheduledExecutorService executor;
     
-    public Tray() {
+    public Tray(String tooltip) {
         if(SystemTray.isSupported()) {
             try {
                 tray = SystemTray.getSystemTray();
@@ -34,6 +34,7 @@ public class Tray {
                 Image image = Toolkit.getDefaultToolkit().createImage(img);
                 TrayIcon trayIcon = new TrayIcon(image);
                 trayIcon.setImageAutoSize(true);
+                trayIcon.setToolTip(tooltip);
                 
                 trayIcon.setPopupMenu(menu());
                 tray.add(trayIcon);
@@ -43,6 +44,10 @@ public class Tray {
         }
     }
 
+    public void setTooltip(String tooltip) {
+        
+    }
+    
     public void setNsmouse(NSMouse nsmouse) {
         this.nsmouse = nsmouse;
     }

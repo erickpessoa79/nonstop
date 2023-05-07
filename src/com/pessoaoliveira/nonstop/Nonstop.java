@@ -1,5 +1,6 @@
 /*
-autor: erick
+*   utility to prevent the operating system from sleeping
+*   https://github.com/erickpessoa79/nonstop
 */
 package com.pessoaoliveira.nonstop;
 
@@ -19,24 +20,27 @@ import java.util.logging.Logger;
 public class Nonstop {
     private final Tray tray;
     private NSMouse ns;
+    private final String TITLE = "NONStop";
+    private final String version = "v0.1.1-beta.1";
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         int delay = 1 * 60 * 1000; //in minutes, default: 1
-        try {
-            if(args.length>0) {
-                System.out.println(
-                    "args: "+Arrays.toString(args)
-                );
-                delay = Integer.parseInt(args[0]) * 60 * 1000;
-            } else {
-                System.out.println(
-                    "usage:\nnonstop interval"
-                );
-            }
-            
+        
+        if(args.length>0) {
+            System.out.println(
+                "args: "+Arrays.toString(args)
+            );
+            delay = Integer.parseInt(args[0]) * 60 * 1000;
+        } else {
+            System.out.println(
+                "usage:\nnonstop interval"
+            );
+        }
+        
+        try {    
             if(delay == 0) delay = 10000; //min: 10 
             System.out.println("\tscheduled at "
                     + (delay<60000?(delay/1000)+"s":(delay/60000)+"m")+" rate");
@@ -49,7 +53,7 @@ public class Nonstop {
     }
     
     public Nonstop() {
-        tray = new Tray();
+        tray = new Tray(TITLE + " " + version);
     }
     
     public void play() {
