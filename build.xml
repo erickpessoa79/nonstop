@@ -10,8 +10,10 @@
 <project name="nonstop" default="default" basedir=".">
     <description>Builds, tests, and runs the project nonstop.</description>
     <import file="nbproject/build-impl.xml"/>
+    <property name="dist.version"  value="0.1.1-beta.1"/>
     <target name="-post-jar">
-        <copy file="${dist.jar}" tofile="dist/nonstop_v0.1.1-beta.1.jar"/>
+        <copy file="${dist.jar}"
+              tofile="${dist.dir}/${ant.project.name}_v${dist.version}.jar"/>
     </target>
     <!--
 
