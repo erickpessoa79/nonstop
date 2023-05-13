@@ -2,7 +2,7 @@
  */
 package com.pessoaoliveira.nonstop.gui;
 
-import com.pessoaoliveira.nonstop.mouse.NSMouse;
+import com.pessoaoliveira.nonstop.mouse.Mouse;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class Tray {
     private SystemTray tray;
-    private NSMouse nsmouse;
+    private Mouse mouse;
     private ScheduledExecutorService executor;
     
     public Tray(String tooltip) {
@@ -44,12 +44,8 @@ public class Tray {
         }
     }
 
-    public void setTooltip(String tooltip) {
-        
-    }
-    
-    public void setNsmouse(NSMouse nsmouse) {
-        this.nsmouse = nsmouse;
+    public void setMouse(Mouse mouse) {
+        this.mouse = mouse;
     }
 
     public void setExecutor(ScheduledExecutorService executor) {
@@ -62,7 +58,7 @@ public class Tray {
         
         item.addActionListener((ActionEvent e) -> {
             executor.shutdown();
-            if(nsmouse.isShowImage()) nsmouse.closeDialog();
+            if(mouse.isShowImage()) mouse.closeDialog();
             TrayIcon[] icons = tray.getTrayIcons();
             for(TrayIcon icon: icons)
                 tray.remove(icon);

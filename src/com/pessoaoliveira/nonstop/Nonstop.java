@@ -5,7 +5,7 @@
 package com.pessoaoliveira.nonstop;
 
 import com.pessoaoliveira.nonstop.gui.Tray;
-import com.pessoaoliveira.nonstop.mouse.NSMouse;
+import com.pessoaoliveira.nonstop.mouse.Mouse;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,57 +18,57 @@ import java.util.logging.Logger;
  * @author erick.pessoa@hotmail.com
  */
 public class Nonstop {
-    private final Tray tray;
-    private NSMouse ns;
+    private Mouse ns;
     private final String TITLE = "NONStop";
     private final String version = "v0.1.1-beta.1";
+    private final int delay;
+    private final Tray tray;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int delay = 1 * 60 * 1000; //in minutes, default: 1
+        int delay = 1 * 60;//in minutes, default: 1
         
         if(args.length>0) {
             System.out.println(
                 "args: "+Arrays.toString(args)
             );
-            delay = Integer.parseInt(args[0]) * 60 * 1000;
+            delay = Integer.parseInt(args[0]) * 60;
         } else {
             System.out.println(
-                "usage:\nnonstop interval"
+                "usage:\n\tnonstop [interval]"
             );
         }
         
         try {    
-            if(delay == 0) delay = 10000; //min: 10 
+            if(delay == 0) delay = 10; //min: 10s 
             System.out.println("\tscheduled at "
-                    + (delay<60000?(delay/1000)+"s":(delay/60000)+"m")+" rate");
+                    + (delay<60?delay+"s":(delay/60)+"m")+" rate");
             
-            Nonstop nonstop = new Nonstop();
+            Nonstop nonstop = new Nonstop(delay);
             nonstop.play();
         } catch (NumberFormatException ex) {
             Logger.getLogger(Nonstop.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public Nonstop() {
+    public Nonstop(int delay) {
+        this.delay = delay;
         tray = new Tray(TITLE + " " + version);
     }
     
     public void play() {
+        ns = new Mouse();
+//        ns.setShowImage(true);
+        tray.setMouse(ns);
+        
+//        Runnable runn = new Runnable() {@Override public void run() {}};
+        Runnable runn = () -> {ns.start();};
+        
         ScheduledExecutorService executor = Executors
                 .newSingleThreadScheduledExecutor();
-        
-        ns = new NSMouse();
-//        ns.setShowImage(true);
-        tray.setNsmouse(ns);
-        
-        Runnable runn = () -> {
-            ns.start();
-        };
-        
-        executor.scheduleAtFixedRate(runn, 1, 10, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(runn, 1, delay, TimeUnit.SECONDS);
         tray.setExecutor(executor);
     }
 }
