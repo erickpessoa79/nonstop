@@ -1,8 +1,6 @@
-/*
- */
 package com.pessoaoliveira.nonstop.gui;
 
-import com.pessoaoliveira.nonstop.mouse.Mouse;
+import com.pessoaoliveira.nonstop.devices.Mouse;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;

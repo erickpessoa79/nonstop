@@ -5,7 +5,8 @@
 package com.pessoaoliveira.nonstop;
 
 import com.pessoaoliveira.nonstop.gui.Tray;
-import com.pessoaoliveira.nonstop.mouse.Mouse;
+import com.pessoaoliveira.nonstop.devices.Screen;
+import com.pessoaoliveira.nonstop.devices.Mouse;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
  * @author erick.pessoa@hotmail.com
  */
 public class Nonstop {
-    private Mouse ns;
+    private Mouse mouse;
     private final String TITLE = "NONStop";
     private final String version = "v0.1.1-beta.1";
     private final int delay;
@@ -59,12 +60,14 @@ public class Nonstop {
     }
     
     public void play() {
-        ns = new Mouse();
-//        ns.setShowImage(true);
-        tray.setMouse(ns);
+        mouse = new Mouse();
+//        mouse.setShowImage(true);
+        tray.setMouse(mouse);
+        
+//        screen = new Screen();
         
 //        Runnable runn = new Runnable() {@Override public void run() {}};
-        Runnable runn = () -> {ns.start();};
+        Runnable runn = () -> {mouse.start();};
         
         ScheduledExecutorService executor = Executors
                 .newSingleThreadScheduledExecutor();
