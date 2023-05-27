@@ -1,6 +1,6 @@
 package com.pessoaoliveira.nonstop.gui;
 
-import com.pessoaoliveira.nonstop.devices.Mouse;
+import com.pessoaoliveira.nonstop.beans.Mouse;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -56,7 +56,7 @@ public class Tray {
         
         item.addActionListener((ActionEvent e) -> {
             executor.shutdown();
-            if(mouse.isShowImage()) mouse.closeDialog();
+            if(mouse.isShowImage()) mouse.getImages().closeDialog();
             TrayIcon[] icons = tray.getTrayIcons();
             for(TrayIcon icon: icons)
                 tray.remove(icon);

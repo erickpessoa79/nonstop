@@ -1,8 +1,6 @@
-package com.pessoaoliveira.nonstop.devices;
+package com.pessoaoliveira.nonstop.beans;
 
-import com.pessoaoliveira.nonstop.images.Images;
 import java.awt.AWTException;
-import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
@@ -11,9 +9,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 /**
  *
@@ -22,37 +17,29 @@ import javax.swing.SwingConstants;
 public class Mouse implements Runnable {
     private Thread thread;
     private Robot robot;
-    private JDialog dialog;
-    private JLabel label;
     private final int delay = 1000;
     private boolean showImage;
     private final List<Object[]> lst;
-    private int[] size;
     private Images images;
     
     public Mouse() {
         lst = new ArrayList<>();
         try {
             robot = new Robot();
-            setSize(new int[]{45, 35});
             images = new Images();
+            images.setSize(new int[]{45, 35});
         } catch (AWTException ex) {
             Logger.getLogger(Mouse.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    /**
-     *
-     * @param size
-     *      int[] {width, height}
-     */
-    public final void setSize(int[] size) {
-        this.size = size;
+
+    public Images getImages() {
+        return images;
     }
     
     public void setShowImage(boolean showImage) {
         this.showImage = showImage;
-        if(showImage) startDialog();
+        if(showImage) images.startDialog();
         
     }
 
@@ -87,69 +74,31 @@ public class Mouse implements Runnable {
 //        System.out.println(new Date()+" " + getLocation()); //debug
         try {
             if(showImage) {
-                dialog.setLocation(getLocation().x-40, getLocation().y-10);
-                dialog.setVisible(true);
-                images.setImage(label, size, 1);
+                images.setLocation(getLocation().x-40, getLocation().y-10);
+                images.setVisible(true);
+                images.setImage(1);
             }
             int end = getLocation().x + pixels;
             int x = 0, y = getLocation().x;
             while(y++ < end) {
                 robot.mouseMove(y, getLocation().y);
-                if(showImage) images.imageMove(label, x++, 0);
+                if(showImage) images.imageMove(x++, 0);
             }
             Thread.sleep(delay);//robot.delay(rdl);
             if(showImage) {
-                dialog.setLocation(getLocation().x-100, getLocation().y-10);
-                images.setImage(label, size, 2);
+                images.setLocation(getLocation().x-100, getLocation().y-10);
+                images.setImage(2);
             }
             end -= pixels;
             while(y-- > end) {
                 robot.mouseMove(y, getLocation().y);
-                if(showImage) images.imageMove(label, x--, 0);
+                if(showImage) images.imageMove(x--, 0);
             }
             Thread.sleep(delay);//robot.delay(rdl);
-            if(showImage) {
-                dialog.setVisible(false);
-            }
+            if(showImage) images.setVisible(false);
         } catch (InterruptedException ex) {
-            closeDialog();
+            images.closeDialog();
             Logger.getLogger(Mouse.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private void startDialog() {
-        label = new JLabel();
-        label.setHorizontalAlignment(SwingConstants.LEFT);
-        dialog = new JDialog();
-        
-        dialog.setUndecorated(true);
-        dialog.getRootPane().setOpaque(false);
-        dialog.getContentPane().setBackground(new Color (0, 0, 0, 0));
-        dialog.setBackground(new Color (0, 0, 0, 0));
-//        dialog.getContentPane().setBackground(Color.BLUE);
-//        dialog.setBackground(Color.BLUE);
-
-        dialog.add(label);
-        dialog.pack();
-        dialog.setAlwaysOnTop(true);
-        dialog.setSize(size[0] + 100, size[1]);
-//        System.out.println(dialog.getInsets().top);
-//        System.out.println(dialog.getInsets().bottom);
-//        System.out.println(dialog.getHeight());
-        
-//        Cursor cursor = dialog.getCursor();
-//        BufferedImage cursorImg = new BufferedImage(16, 16,
-//                BufferedImage.TYPE_INT_ARGB);
-//        Cursor blankCursor = Toolkit.getDefaultToolkit()
-//                .createCustomCursor(cursorImg, new Point(0, 0), null);
-//        dialog.setCursor(blankCursor);
-////        dialog.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-    }
-    
-    public void closeDialog() {
-        if(dialog != null) {
-            dialog.removeAll();
-            dialog.dispose();
         }
     }
     

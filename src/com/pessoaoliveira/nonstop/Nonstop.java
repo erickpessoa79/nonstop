@@ -5,8 +5,8 @@
 package com.pessoaoliveira.nonstop;
 
 import com.pessoaoliveira.nonstop.gui.Tray;
-import com.pessoaoliveira.nonstop.devices.Screen;
-import com.pessoaoliveira.nonstop.devices.Mouse;
+import com.pessoaoliveira.nonstop.beans.Screen;
+import com.pessoaoliveira.nonstop.beans.Mouse;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -61,7 +61,7 @@ public class Nonstop {
     
     public void play() {
         mouse = new Mouse();
-//        mouse.setShowImage(true);
+        mouse.setShowImage(true);
         tray.setMouse(mouse);
         
 //        screen = new Screen();

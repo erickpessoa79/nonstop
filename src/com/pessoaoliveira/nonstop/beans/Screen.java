@@ -1,4 +1,4 @@
-package com.pessoaoliveira.nonstop.devices;
+package com.pessoaoliveira.nonstop.beans;
 
 import java.awt.AWTException;
 import java.awt.DisplayMode;
