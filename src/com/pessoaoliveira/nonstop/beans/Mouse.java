@@ -64,9 +64,8 @@ public class Mouse implements Runnable {
                     && curr[1].equals(prev[1]))
                 move(100);
             
-//            String format = String.format("%s %s, %s %s",
-//                    curr[0], prev[0], curr[1], prev[1]);
-//            System.out.println(format);
+            System.out.println(String.format("%s %s, %s %s",
+                    curr[0], prev[0], curr[1], prev[1]));
         }
     }
     

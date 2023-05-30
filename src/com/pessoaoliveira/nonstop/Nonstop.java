@@ -10,6 +10,7 @@ import com.pessoaoliveira.nonstop.beans.Mouse;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +39,7 @@ public class Nonstop {
             delay = Integer.parseInt(args[0]) * 60;
         } else {
             System.out.println(
-                "usage:\n\tnonstop [interval]"
+                "usage:\n\tjava -jar nonstop.jar [period]"
             );
         }
         
@@ -67,11 +68,18 @@ public class Nonstop {
 //        screen = new Screen();
         
 //        Runnable runn = new Runnable() {@Override public void run() {}};
-        Runnable runn = () -> {mouse.start();};
+        Runnable runnable = () -> {mouse.start();};
+        tray.setRunnable(runnable);
         
+//        ScheduledExecutorService executor = Executors
+//                .newScheduledThreadPool(5);
         ScheduledExecutorService executor = Executors
                 .newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(runn, 1, delay, TimeUnit.SECONDS);
+        ScheduledFuture<?> schedule = executor
+                .scheduleAtFixedRate(runnable, 1, delay, TimeUnit.SECONDS);
+        
+        tray.setDelay(delay);
+        tray.setSchedule(schedule);
         tray.setExecutor(executor);
     }
 }
