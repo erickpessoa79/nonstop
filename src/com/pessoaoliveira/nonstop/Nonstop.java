@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class Nonstop {
     private Mouse mouse;
     private final String TITLE = "NONStop";
-    private final String version = "v0.1.1-beta.1";
+    private final String version = "v0.2.1-beta.1";
     private final int period;
     private final Tray tray;
     
