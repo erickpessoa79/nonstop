@@ -5,7 +5,6 @@
 package com.pessoaoliveira.nonstop;
 
 import com.pessoaoliveira.nonstop.gui.Tray;
-import com.pessoaoliveira.nonstop.beans.Screen;
 import com.pessoaoliveira.nonstop.beans.Mouse;
 import java.util.Arrays;
 import java.util.concurrent.Executors;
@@ -23,20 +22,20 @@ public class Nonstop {
     private Mouse mouse;
     private final String TITLE = "NONStop";
     private final String version = "v0.1.1-beta.1";
-    private final int delay;
+    private final int period;
     private final Tray tray;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int delay = 1 * 60;//in minutes, default: 1
+        int per = 1 * 60;//in minutes, default: 1
         
         if(args.length>0) {
             System.out.println(
                 "args: "+Arrays.toString(args)
             );
-            delay = Integer.parseInt(args[0]) * 60;
+            per = Integer.parseInt(args[0]) * 60;
         } else {
             System.out.println(
                 "usage:\n\tjava -jar nonstop.jar [period]"
@@ -44,28 +43,26 @@ public class Nonstop {
         }
         
         try {    
-            if(delay == 0) delay = 10; //min: 10s 
+            if(per == 0) per = 10; //min: 10s 
             System.out.println("\tscheduled at "
-                    + (delay<60?delay+"s":(delay/60)+"m")+" rate");
+                    + (per<60?per+"s":(per/60)+"m")+" rate");
             
-            Nonstop nonstop = new Nonstop(delay);
+            Nonstop nonstop = new Nonstop(per);
             nonstop.play();
         } catch (NumberFormatException ex) {
             Logger.getLogger(Nonstop.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public Nonstop(int delay) {
-        this.delay = delay;
+    public Nonstop(int period) {
+        this.period = period;
         tray = new Tray(TITLE + " " + version);
     }
     
     public void play() {
         mouse = new Mouse();
-        mouse.setShowImage(true);
+//        mouse.setShowImage(true);
         tray.setMouse(mouse);
-        
-//        screen = new Screen();
         
 //        Runnable runn = new Runnable() {@Override public void run() {}};
         Runnable runnable = () -> {mouse.start();};
@@ -76,9 +73,9 @@ public class Nonstop {
         ScheduledExecutorService executor = Executors
                 .newSingleThreadScheduledExecutor();
         ScheduledFuture<?> schedule = executor
-                .scheduleAtFixedRate(runnable, 1, delay, TimeUnit.SECONDS);
+                .scheduleAtFixedRate(runnable, 1, period, TimeUnit.SECONDS);
         
-        tray.setDelay(delay);
+        tray.setDelay(period);
         tray.setSchedule(schedule);
         tray.setExecutor(executor);
     }

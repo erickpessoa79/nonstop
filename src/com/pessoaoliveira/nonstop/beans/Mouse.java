@@ -39,8 +39,10 @@ public class Mouse implements Runnable {
     
     public void setShowImage(boolean showImage) {
         this.showImage = showImage;
-        if(showImage) images.startDialog();
-        
+        if(showImage) 
+            images.startDialog();
+        else
+            images.closeDialog();
     }
 
     public boolean isShowImage() {
